@@ -19,7 +19,7 @@ const Users = () => {
   const handleDelete = (userId) => {
     setUsers(
       users.filter((user) => {
-        return user._id != userId;
+        return user._id !== userId;
       })
     );
   };
