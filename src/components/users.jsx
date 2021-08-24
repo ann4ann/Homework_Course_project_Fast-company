@@ -26,8 +26,9 @@ const Users = () => {
 
   const renderPhrase = (number) => {
     const usersCount = number.length
+    const ending = (usersCount > 1 && usersCount < 5) ? 'а' : ''
     if (usersCount) {
-        return <span className="badge bg-primary">{usersCount} человек тусанет с тобой сегодня</span>
+        return <span className="badge bg-primary">{usersCount} человек{ending} тусанет с тобой сегодня</span>
     } else {
         document.querySelector('.table').innerHTML = ''
         return <span className="badge bg-danger">Никто с тобой не тусанет</span>
