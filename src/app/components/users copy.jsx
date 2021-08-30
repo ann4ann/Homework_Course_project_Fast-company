@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import api from "../api";
+// import User from "./user"
+import api from "../api";   //убрать
 
 const Users = () => {
   // // api.users.fetchAll
@@ -25,16 +26,19 @@ const Users = () => {
   };
 
   const renderPhrase = (number) => {
-    const usersCount = number.length
-    const ending = (usersCount > 1 && usersCount < 5) ? 'а' : ''
+    const usersCount = number.length;
+    const ending = usersCount > 1 && usersCount < 5 ? "а" : "";
     if (usersCount) {
-        return <span className="badge bg-primary">{usersCount} человек{ending} тусанет с тобой сегодня</span>
+      return (
+        <span className="badge bg-primary">
+          {usersCount} человек{ending} тусанет с тобой сегодня
+        </span>
+      );
     } else {
-        document.querySelector('.table').innerHTML = ''
-        return <span className="badge bg-danger">Никто с тобой не тусанет</span>
+      document.querySelector(".table").innerHTML = "";
+      return <span className="badge bg-danger">Никто с тобой не тусанет</span>;
     }
-    
-  }
+  };
 
   return (
     <>
@@ -60,7 +64,12 @@ const Users = () => {
                 <td>{user.completedMeetings}</td>
                 <td>{user.rate}</td>
                 <td>
-                  <button onClick={() => handleDelete(user._id)} className="btn btn-primary bg-danger">delete</button>
+                  <button
+                    onClick={() => handleDelete(user._id)}
+                    className="btn btn-primary bg-danger"
+                  >
+                    delete
+                  </button>
                 </td>
               </tr>
             );
