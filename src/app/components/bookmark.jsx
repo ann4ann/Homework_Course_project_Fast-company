@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const BookMark = ({ status }) => {
     const bookMarkStatus = status;
@@ -34,6 +35,10 @@ const BookMark = ({ status }) => {
     };
 
     return renderBookMark();
+};
+
+BookMark.propTypes = {
+    status: PropTypes.bool.isRequired
 };
 
 export default BookMark;

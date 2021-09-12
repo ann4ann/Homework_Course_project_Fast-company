@@ -67,7 +67,7 @@ const Users = () => {
                             <tr key={user._id}>
                                 <th scope="row">{user.name}</th>
                                 <td>{renderQualities(user)}</td>
-                                <td>{user.profession.name}</td>
+                                <td>{user.ession.name}</td>
                                 <td>{user.completedMeetings}</td>
                                 <td>{user.rate}</td>
                                 <td>

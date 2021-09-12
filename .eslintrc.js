@@ -18,7 +18,12 @@ module.exports = {
         // точки с запятыми
         semi: [2, "always"],
         // пробелы перед объявлением функции
-        "space-before-function-paren": ["error", "never"],
+        // "space-before-function-paren": ["error", "never"],
+        // добавить пробел перед анонимной функцией:
+        "space-before-function-paren": [
+            "error",
+            { anonymous: "always", named: "never" }
+        ],
         // двойные кавычки
         quotes: ["error", "double", { allowTemplateLiterals: true }]
     }

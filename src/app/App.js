@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Users from "./components/users";
-import SearchStatus from "./components/searchStatus";
-import api from "./api";
+import api from "./api/index";
 
 function App() {
-    const initialState = api.users.fetchAll().map((initUser) => {
-        return { ...initUser, status: false };
-    });
-    const [users, setUsers] = useState(initialState);
+    // const initialState = api.users.fetchAll().map((initUser) => {
+    //     return { ...initUser, status: false };
+    // });
+    const [users, setUsers] = useState();
     // console.log(users);
+
+    useEffect(() => {
+        // console.log("one");
+        api.users.fetchAll().then((data) => {
+            console.log(data);
+            setUsers(data.map((item) => ({ ...item, status: false })));
+        });
+    }, []);
 
     const handleDelete = (userId) => {
         const newUsers = users.filter((user) => {
@@ -33,7 +40,6 @@ function App() {
 
     return (
         <div>
-            <SearchStatus length={users.length} />
             <Users
                 users={users}
                 onDelete={handleDelete}
