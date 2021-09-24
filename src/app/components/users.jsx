@@ -1,20 +1,46 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Pagination from "./paginations";
-import { paginate } from "../utils/paginate";
-import User from "./user";
-import api from "../api/index";
-import GroupList from "./groupList";
-import SearchStatus from "./searchStatus";
 import _ from "lodash";
 
-const Users = ({ users: allUsers, ...rest }) => {
+import api from "../api/index";
+import { paginate } from "../utils/paginate";
+import Pagination from "./paginations";
+import GroupList from "./groupList";
+import SearchStatus from "./searchStatus";
+import UserTable from "./usersTable";
+
+const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     // const [professions, setProfession] = useState(api.professions.fetchAll());
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const pageSize = 8;
 
-    const pageSize = 2;
+    const [users, setUsers] = useState();
+
+    useEffect(() => {
+        api.users.fetchAll().then((data) => {
+            setUsers(data);
+        });
+    }, []);
+
+    const handleDelete = (userId) => {
+        const newUsers = users.filter((user) => {
+            return user._id !== userId;
+        });
+        setUsers(newUsers);
+    };
+
+    const handleToggleBookMark = (userId) => {
+        const newUsers = users.map((user) => {
+            if (user._id === userId) {
+                return { ...user, bookmark: !user.bookmark };
+            }
+            return user;
+        });
+        setUsers(newUsers);
+    };
 
     useEffect(() => {
         // console.log("send request");
@@ -31,7 +57,7 @@ const Users = ({ users: allUsers, ...rest }) => {
     // чтобы не пропадали люди при фильтре с пустой страницы
     useEffect(() => {
         setCurrentPage(1);
-        console.log(selectedProf);
+        // console.log(selectedProf);
     }, [selectedProf]);
 
     // // отображаем изменения элемента professions:
@@ -81,6 +107,23 @@ const Users = ({ users: allUsers, ...rest }) => {
         setCurrentPage(pageIndex);
     };
 
+    const handleSort = (item) => {
+        // следующее переносим в usersTable:
+        // if (sortBy.iter === item) {
+        //     setSortBy((prevState) => ({
+        //         ...prevState,
+        //         order: prevState.order === "asc" ? "desc" : "asc"
+        //     }));
+        // } else {
+        //     setSortBy({ iter: item, order: "asc" });
+        // }
+        // и вместо этого (т.к. передаем уже целый объект) пишем:
+        setSortBy(item);
+
+        // setSortBy({ iter: item, order: "asc" });
+        // console.log(item);
+    };
+
     // можно реализовать разбиение на страницы здесь,
     // но луше в отдельном файле utils > paginate.js
 
@@ -88,79 +131,71 @@ const Users = ({ users: allUsers, ...rest }) => {
     // {professions && (<GroupList ... />)}
     // const paginateFilteredUsers = () => {};
 
-    const getUsersByProfession = () => {
-        return allUsers.filter((user) =>
-            _.isEqual(user.profession, selectedProf)
+    if (users) {
+        const filteredUsers = selectedProf
+            ? users.filter((user) => _.isEqual(user.profession, selectedProf))
+            : users;
+        // count объявляем после filteredUsers, и вместо длины users считаем filteredUsers
+        const count = filteredUsers.length;
+        // orderBy - 1 парам - массив, 2 = по какому параметру, 3 - порядок (asc/desc)
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.path],
+            [sortBy.order]
         );
-    };
+        const usersCrop = paginate(sortedUsers, currentPage, pageSize);
 
-    const filteredUsers =
-        selectedProf && allUsers ? getUsersByProfession() : allUsers;
-    // count объявляем после filteredUsers, и вместо длины allUsers считаем filteredUsers
-    const count = allUsers ? filteredUsers.length : 0;
+        const clearFilter = () => {
+            setSelectedProf();
+        };
 
-    const users = paginate(filteredUsers, currentPage, pageSize);
-
-    const clearFilter = () => {
-        setSelectedProf();
-    };
-
-    return (
-        <div className="d-flex">
-            {professions && (
-                <div className="d-flex flex-column flex-shrink-0 p3">
-                    <GroupList
-                        selectedItem={selectedProf}
-                        items={professions}
-                        onItemSelect={handleProfessionSelect}
-                        // указываем, если в GroupList нет defaultProperty
-                        // valueProperty="_id"
-                        // contentProperty="name"
-                    />
-                    <button
-                        className="btn btn-secondary mt-2"
-                        onClick={clearFilter}
-                    >
-                        Очистить
-                    </button>
-                </div>
-            )}
-
-            {allUsers && (
-                <div className="d-flex flex-column">
-                    <SearchStatus length={count} />
-                    {count > 0 && (
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Имя</th>
-                                    <th scope="col">Качества</th>
-                                    <th scope="col">Профессия</th>
-                                    <th scope="col">Встретился, раз</th>
-                                    <th scope="col">Оценка</th>
-                                    <th scope="col">Избранное</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {users.map((user) => (
-                                    <User key={user._id} {...user} {...rest} />
-                                ))}
-                            </tbody>
-                        </table>
-                    )}
-                    <div className="d-flex justify-content-center">
-                        <Pagination
-                            itemsCount={count}
-                            pageSize={pageSize}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
+        return (
+            <div className="d-flex">
+                {professions && (
+                    <div className="d-flex flex-column flex-shrink-0 p3">
+                        <GroupList
+                            selectedItem={selectedProf}
+                            items={professions}
+                            onItemSelect={handleProfessionSelect}
+                            // указываем, если в GroupList нет defaultProperty
+                            // valueProperty="_id"
+                            // contentProperty="name"
                         />
+                        <button
+                            className="btn btn-secondary mt-2"
+                            onClick={clearFilter}
+                        >
+                            Очистить
+                        </button>
                     </div>
-                </div>
-            )}
-        </div>
-    );
+                )}
+
+                {users && (
+                    <div className="d-flex flex-column">
+                        <SearchStatus length={count} />
+                        {count > 0 && (
+                            <UserTable
+                                users={usersCrop}
+                                onSort={handleSort}
+                                selectedSort={sortBy}
+                                onDelete={handleDelete}
+                                onToggleBookMark={handleToggleBookMark}
+                            />
+                        )}
+                        <div className="d-flex justify-content-center">
+                            <Pagination
+                                itemsCount={count}
+                                pageSize={pageSize}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+    return "Loading...";
 };
 
 Users.propTypes = {

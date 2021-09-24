@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Qualitie from "./qualitie";
+import Qualitie from "./quality";
 import BookMark from "./bookmark";
 
 const User = ({
@@ -17,7 +17,7 @@ const User = ({
     const allQualities = qualities.map((qualitie) => {
         return Qualitie(qualitie);
     });
-    //   console.log(onToggleBookMark)
+    // console.log(onToggleBookMark);
 
     return (
         <tr key={_id}>
@@ -27,9 +27,10 @@ const User = ({
             <td>{completedMeetings}</td>
             <td>{rate} /5</td>
             <td>
-                <button onClick={() => onToggleBookMark(_id)}>
-                    <BookMark status={status} />
-                </button>
+                <BookMark
+                    status={status}
+                    onClick={() => onToggleBookMark(_id)}
+                />
             </td>
             <td>
                 <button
