@@ -14,7 +14,7 @@ module.exports = {
     plugins: ["react"],
     rules: {
         // отступы
-        indent: ["error", 4],
+        indent: ["error", 2],
         // точки с запятыми
         semi: [2, "always"],
         // пробелы перед объявлением функции
