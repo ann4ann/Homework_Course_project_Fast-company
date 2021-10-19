@@ -7,22 +7,22 @@ import Main from "./layouts/main";
 import Login from "./layouts/login";
 
 function App() {
-    return (
-        <>
-            <NavBar />
-            <Switch>
-                <Route path="/" exact component={Main} />
-                <Route path="/login" component={Login} />
-                <Route path="/users/:userId?" component={Users} />
-                {/* <Route path="/users" component={UsersList} /> */}
-                {/* <Users
+  return (
+    <>
+      <NavBar />
+      <Switch>
+        <Route path="/" exact component={Main} />
+        <Route path="/login" component={Login} />
+        <Route path="/users/:userId?" component={Users} />
+        {/* <Route path="/users" component={UsersList} /> */}
+        {/* <Users
                 // users={users}
                 // onDelete={handleDelete}
                 // onToggleBookMark={handleToggleBookMark}
                 /> */}
-            </Switch>
-        </>
-    );
+      </Switch>
+    </>
+  );
 }
 
 export default App;
