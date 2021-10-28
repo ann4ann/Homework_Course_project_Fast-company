@@ -14,7 +14,15 @@ module.exports = {
   plugins: ["react"],
   rules: {
     // отступы
-    indent: ["error", 2, { SwitchCase: 1 }],
+    indent: [
+      "error",
+      2,
+      {
+        SwitchCase: 1,
+        ignoredNodes: ["ArrowFunctionExpression > ObjectExpression"]
+        // ObjectExpression: "first"
+      }
+    ],
     // точки с запятыми
     semi: [2, "always"],
     // пробелы перед объявлением функции
@@ -25,6 +33,7 @@ module.exports = {
       { anonymous: "always", named: "never" }
     ],
     // двойные кавычки
-    quotes: ["error", "double", { allowTemplateLiterals: true }]
+    quotes: ["error", "double", { allowTemplateLiterals: true }],
+    "multiline-ternary": ["off"]
   }
 };
