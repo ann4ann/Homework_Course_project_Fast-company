@@ -3,6 +3,5 @@ module.exports = {
   semi: true,
   useTabs: false,
   bracketSpacing: true,
-  jsxBracketSameLine: true,
   arrowParens: "always"
 };

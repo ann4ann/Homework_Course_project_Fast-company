@@ -3,21 +3,34 @@ import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
+import MultiSelectField from "../common/form/multiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
-  const [data, setData] = useState({ email: "", password: "", profession: "" });
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    profession: "",
+    sex: "male",
+    qualities: [],
+    license: false
+  });
+  const [qualities, setQualities] = useState({});
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
+    api.qualities.fetchAll().then((data) => setQualities(data));
   }, []);
 
   // useEffect(() => {
   //   console.log(professions);
   // }, [professions]);
 
-  const handleChange = ({ target }) => {
+  const handleChange = (target) => {
+    // console.log(target);
     setData((prevState) => ({
       ...prevState,
       [target.name]: target.value
@@ -42,6 +55,12 @@ const RegisterForm = () => {
     },
     profession: {
       isRequired: { message: "Обязательно выберите вашу профессию" }
+    },
+    license: {
+      isRequired: {
+        message:
+          "Вы не можете испльзовать наш сервис без подтверждения лицензионного соглашения"
+      }
     }
   };
   useEffect(() => {
@@ -83,13 +102,38 @@ const RegisterForm = () => {
         error={errors.password}
       />
       <SelectField
-        label="Выберите вашу профессию"
+        label="Выберите вашу профессию:"
         defaultOption="Choose..."
         options={professions}
         onChange={handleChange}
         value={data.profession}
         error={errors.profession}
       />
+      <RadioField
+        options={[
+          { name: "Male", value: "male" },
+          { name: "Female", value: "female" },
+          { name: "Other", value: "other" }
+        ]}
+        value={data.sex}
+        name="sex"
+        onChange={handleChange}
+        label="Выберите ваш пол:"
+      />
+      <MultiSelectField
+        options={qualities}
+        onChange={handleChange}
+        name="qualities"
+        label="Выберите ваши качества:"
+      />
+      <CheckBoxField
+        value={data.license}
+        onChange={handleChange}
+        name="license"
+        error={errors.license}
+      >
+        Подтвердить <a href="">лицензионное соглашение</a>
+      </CheckBoxField>
 
       {/* <div className="mb-4">
         <label htmlFor="validationCustom04" className="form-label">
@@ -122,7 +166,8 @@ const RegisterForm = () => {
       <button
         type="submit"
         disabled={!isValid}
-        className="btn btn-primary w-100 mx-auto">
+        className="btn btn-primary w-100 mx-auto"
+      >
         Submit
       </button>
     </form>

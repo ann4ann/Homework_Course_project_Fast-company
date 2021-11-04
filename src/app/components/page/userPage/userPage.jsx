@@ -14,8 +14,9 @@ const UserPage = ({ id }) => {
     });
   }, []);
 
-  const handleGoToUsers = () => {
-    history.push("/users");
+  const handleChangeUser = () => {
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    history.push(history.location.pathname + "/edit");
   };
 
   return (
@@ -33,11 +34,12 @@ const UserPage = ({ id }) => {
           <p>completedMeetings: {user.completedMeetings}</p>
           <h3>Rate: {user.rate}</h3>
           <button
+            className="btn btn-outline-primary"
             onClick={() => {
-              handleGoToUsers();
+              handleChangeUser();
             }}
           >
-            Все пользователи
+            Изменить
           </button>
         </>
       )}

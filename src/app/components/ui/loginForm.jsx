@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { validator } from "../../utils/validator";
+import CheckBoxField from "../common/form/checkBoxField";
 import TextField from "../common/form/textField";
+// !!!!! Валидация с помощью yup
+// import * as yup from "yup";
 
 const LoginForm = () => {
-  const [data, setData] = useState({ email: "", password: "" });
+  const [data, setData] = useState({ email: "", password: "", stayOn: false });
   const [errors, setErrors] = useState({});
 
   // чтобы контролировать несколько полей, можно создать для каждого useState, но это не оптимально
@@ -12,13 +15,44 @@ const LoginForm = () => {
   //     setEmail(e.target.value);
   //     // console.log(e.target.value, "changed");
   // };
-  const handleChange = ({ target }) => {
+  // const handleChange = ({ target }) => {
+  //   setData((prevState) => ({
+  //     ...prevState,
+  //     [target.name]: target.value
+  //   }));
+  //   // console.log(target.name, target.value);
+  // };
+  // Заменяем на следующее:
+  const handleChange = (target) => {
     setData((prevState) => ({
       ...prevState,
       [target.name]: target.value
     }));
-    // console.log(target.name, target.value);
   };
+
+  // !!!!! Валидация с помощью yup
+  // const validateSchema = yup.object().shape({
+  //   password: yup
+  //     .string()
+  //     .required("Пароль обязателен для заполнения")
+  //     .matches(
+  //       // здесь: ?= - выполняется ли, .* - один символ совпадает с, [...] - c чем совпадает
+  //       /(?=.*[A-Z])/,
+  //       "Пароль должен содержать хотя бы одну заглавную букву"
+  //     )
+  //     .matches(/(?=.*[0-9])/, "Пароль должен содержать хотя бы одну цифру")
+  //     .matches(
+  //       /(?=.*[!@*#$%^&])/,
+  //       "Пароль должен содержать один из специальных символов !@*#$%^&"
+  //     )
+  //     // проверяем количество символом - зд. минимум 8
+  //     .matches(/(?=.{8,})/, "Пароль должен состоять минимум из 8 символов"),
+  //   email: yup
+  //     .string()
+  //     .required("Электронная почта обязательна для заполнения")
+  //     .email("Email введен некорректно")
+  // });
+
   const validatorConfig = {
     email: {
       isRequired: {
@@ -37,21 +71,30 @@ const LoginForm = () => {
       min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
     }
   };
+
   useEffect(() => {
     validate();
   }, [data]);
 
   const validate = () => {
     const errors = validator(data, validatorConfig);
-    // for (const fieldName in data) {
-    //     if (data[fieldName].trim() === "") {
-    //         errors[fieldName] = `${fieldName} обязательно для заполнения`;
-    //     }
-    // }   // вместо этого:
-    // validator();
+
+    // !!!!! Валидация с помощью yup
+    // // validateSchema.validate(data, {abortEarly:false}).then(()=>{}).catch((err)=>)
+    // validateSchema
+    //   .validate(data)
+    //   .then(() => setErrors({}))
+    //   .catch((err) => setErrors({ [err.path]: err.message }));
+    // // for (const fieldName in data) {
+    // //     if (data[fieldName].trim() === "") {
+    // //         errors[fieldName] = `${fieldName} обязательно для заполнения`;
+    // //     }
+    // // }   // вместо этого:
+    // // validator();
+
     setErrors(errors);
-    // return Object.keys(errors).length === 0?true:false  // эквивалентно v
-    // return Object.keys(errors).length === 0 || false; // также зд можно вообще обойтись без false
+    // // return Object.keys(errors).length === 0?true:false  // эквивалентно v
+    // // return Object.keys(errors).length === 0 || false; // также зд можно вообще обойтись без false
     return Object.keys(errors).length === 0;
   };
 
@@ -94,6 +137,9 @@ const LoginForm = () => {
         onChange={handleChange}
         error={errors.password}
       />
+      <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
+        Оставаться в системе
+      </CheckBoxField>
       {/* кнопке необязательно добавлять type:"submit", т.к. он у всех кнопок в форме по дефолту
               если кнапка не submit, ей необходимо добавить type:"button" */}
       <button
