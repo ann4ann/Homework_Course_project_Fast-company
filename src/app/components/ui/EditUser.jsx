@@ -21,7 +21,7 @@ const EditUser = ({ id }) => {
   const [data, setData] = useState({
     name: userData.name,
     email: userData.email,
-    profession: userData.profession.name,
+    profession: userData.profession._id,
     sex: userData.sex,
     qualities: currentDefaultQualities
   });
@@ -81,10 +81,9 @@ const EditUser = ({ id }) => {
       );
       return currentQualitie;
     }),
-    profession:
-      Object.values(professions).find(
-        (profession) => profession._id === data.profession
-      ) || userData.profession
+    profession: Object.values(professions).find(
+      (profession) => profession._id === data.profession
+    )
   });
 
   const handleSubmit = (e) => {
@@ -121,7 +120,6 @@ const EditUser = ({ id }) => {
             />
             <SelectField
               label="Профессия"
-              // defaultOption="Choose..."
               options={professions}
               onChange={handleChange}
               value={data.profession}
