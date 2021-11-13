@@ -104,6 +104,7 @@ const RegisterForm = () => {
       <SelectField
         label="Выберите вашу профессию:"
         defaultOption="Choose..."
+        name="profession"
         options={professions}
         onChange={handleChange}
         value={data.profession}
