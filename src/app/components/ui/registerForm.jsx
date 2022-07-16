@@ -85,58 +85,60 @@ const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Электронная почта"
-        name="email"
-        value={data.email}
-        onChange={handleChange}
-        error={errors.email}
-      />
-      <TextField
-        label="Пароль"
-        type="password"
-        name="password"
-        value={data.password}
-        onChange={handleChange}
-        error={errors.password}
-      />
-      <SelectField
-        label="Выберите вашу профессию:"
-        defaultOption="Choose..."
-        name="profession"
-        options={professions}
-        onChange={handleChange}
-        value={data.profession}
-        error={errors.profession}
-      />
-      <RadioField
-        options={[
-          { name: "Male", value: "male" },
-          { name: "Female", value: "female" },
-          { name: "Other", value: "other" }
-        ]}
-        value={data.sex}
-        name="sex"
-        onChange={handleChange}
-        label="Выберите ваш пол:"
-      />
-      <MultiSelectField
-        options={qualities}
-        onChange={handleChange}
-        name="qualities"
-        label="Выберите ваши качества:"
-      />
-      <CheckBoxField
-        value={data.license}
-        onChange={handleChange}
-        name="license"
-        error={errors.license}
-      >
-        Подтвердить <a href="">лицензионное соглашение</a>
-      </CheckBoxField>
+    <>
+      {professions && (
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Электронная почта"
+            name="email"
+            value={data.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
+          <TextField
+            label="Пароль"
+            type="password"
+            name="password"
+            value={data.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
+          <SelectField
+            label="Выберите вашу профессию:"
+            defaultOption="Choose..."
+            name="profession"
+            options={professions}
+            onChange={handleChange}
+            value={data.profession}
+            error={errors.profession}
+          />
+          <RadioField
+            options={[
+              { name: "Male", value: "male" },
+              { name: "Female", value: "female" },
+              { name: "Other", value: "other" }
+            ]}
+            value={data.sex}
+            name="sex"
+            onChange={handleChange}
+            label="Выберите ваш пол:"
+          />
+          <MultiSelectField
+            options={qualities}
+            onChange={handleChange}
+            name="qualities"
+            label="Выберите ваши качества:"
+          />
+          <CheckBoxField
+            value={data.license}
+            onChange={handleChange}
+            name="license"
+            error={errors.license}
+          >
+            Подтвердить <a href="">лицензионное соглашение</a>
+          </CheckBoxField>
 
-      {/* <div className="mb-4">
+          {/* <div className="mb-4">
         <label htmlFor="validationCustom04" className="form-label">
           State
         </label>
@@ -164,14 +166,16 @@ const RegisterForm = () => {
         <div className="invalid-feedback">Please select a valid state.</div>
       </div> */}
 
-      <button
-        type="submit"
-        disabled={!isValid}
-        className="btn btn-primary w-100 mx-auto"
-      >
-        Submit
-      </button>
-    </form>
+          <button
+            type="submit"
+            disabled={!isValid}
+            className="btn btn-primary w-100 mx-auto"
+          >
+            Submit
+          </button>
+        </form>
+      )}
+    </>
   );
 };
 

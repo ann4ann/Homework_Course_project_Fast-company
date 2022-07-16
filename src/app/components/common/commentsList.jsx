@@ -39,20 +39,21 @@ const CommentsList = ({ userId }) => {
       <AddComment pageId={userId} addCommentFunc={handleAddComment} />
 
       {/* comments */}
-      <div className="card mb-3">
-        <div className="card-body ">
-          <h2>Comments</h2>
-          <hr />
-          {comments &&
-            comments.map((comment) => (
+      {comments && (
+        <div className="card mb-3">
+          <div className="card-body ">
+            <h2>Comments</h2>
+            <hr />
+            {comments.map((comment) => (
               <Comment
                 key={comment._id}
                 commentData={comment}
                 onClick={handleDeleteComment}
               />
             ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
